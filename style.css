@@ -1,0 +1,372 @@
+/* Global Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #2596be;
+  padding: 1rem 2rem;
+  color: white;
+  width: 100%;
+  z-index: 20;
+  height: 3rem; /* Set a fixed height for navbar */
+}
+
+.navbar .logo {
+  display: flex;
+  align-items: center;
+  margin-left: -1rem;
+}
+
+.navbar .logo img {
+  height: 3rem;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.nav-links li {
+  margin: 0 1rem;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin: 0rem;
+  width: 100%;
+}
+
+/* Filter Menu Styles */
+.filter-menu {
+  min-width: 25%;
+  width: 25%;
+  padding: 1rem;
+  border-right: 1px solid #ddd;
+  background-color: #fff;
+  position: fixed;
+  top: 3rem; /* Adjust to the navbar's height */
+  left: 0;
+  height: calc(100vh - 4rem); /* Full viewport height minus navbar */
+  overflow-y: auto;
+  box-sizing: border-box;
+  z-index: 0;
+}
+
+.filter-menu h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #e6302c;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #ddd;
+}
+
+.slider-column {
+  padding: 0 1rem;
+}
+
+.slider-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.slider-container label {
+  flex: 1;
+  text-align: left;
+  font-size: 1rem;
+  color: #333;
+}
+
+.slider-container input[type="range"] {
+  flex: 1;
+  max-width: 60%; /* Limits the width of the slider */
+  margin-left: 1rem; /* Space between label and slider */
+}
+
+.slider-container input[type="range"]:focus {
+  outline: none;
+  background-color: #d3d3d3;
+}
+
+.filter-menu .filter-dropdown {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  width: 100%;
+}
+
+.filter-menu .filter-dropdown:focus {
+  outline: 3px solid #3498db;
+  outline-offset: 2px;
+}
+
+/* Main Content Adjustments */
+.main-content {
+  padding: 1.5rem;
+  margin-top: 5rem; /* Set this to the same height as navbar */
+  margin-bottom: 5rem; /* Set this to the same height as navbar */
+
+}
+
+/* Gallery Styles */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Grid with responsive column width */
+  gap: 1rem;
+  width: 80%;
+  max-width: calc(100% - 40%);
+  margin-top: 10rem;
+  margin-left: 20%;
+  padding-bottom: 10rem;
+}
+
+.gallery-item {
+  display: flex;
+  flex-direction: row; /* Images and text next to each other */
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.gallery-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.image-container {
+  flex: 1;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.text-container {
+  flex: 1.5;
+  padding: 1rem;
+}
+
+.text-container h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.text-container p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.text-container p:last-child {
+  margin-bottom: 0;
+}
+
+/* Style for help icon */
+.help-icon {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 30px;
+  background-image: url('images/help.png');
+  background-size: cover;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+}
+
+.modal.show {
+  display: flex;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.modal-content {
+  max-width: 60%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem 2rem;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+}
+
+footer p {
+  margin: 0;
+  font-size: 0.875rem;
+}
+
+/* Form and Button Styles */
+form label {
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+form input, form textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+form textarea {
+  resize: vertical;
+}
+
+form input[type="submit"] {
+  background-color: #333;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 0.75rem;
+  font-size: 1rem;
+}
+
+form input[type="submit"]:hover {
+  background-color: #444;
+  transform: scale(1.05);
+}
+
+.toggle-btn {
+  background-color: #3498db;
+  color: white;
+  font-size: 1rem;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s ease;
+}
+
+.toggle-btn:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.toggle-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Section Styles */
+section {
+  padding: 2rem;
+  margin: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 1.5rem;
+  color: #333;
+}
+
+p {
+  font-size: 1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .filter-menu {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-right: none;
+  }
+  
+  .gallery {
+    width: 100%;
+    margin-left: 0;
+  }
+}
