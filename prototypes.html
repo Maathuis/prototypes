@@ -28,10 +28,12 @@
 
     <div class="slider-column">
       <div class="slider-container">
-        <label for="understandability-slider">Understandability:</label>
-        <input type="range" id="understandability-slider" min="1" max="10" value="1">
-        <span id="understandability-slider-value">1</span>
-      </div>
+      <label for="understandability-slider" class="dialog-label" data-info="This measures how understandable the explanation is to the user.">
+        Understandability:
+      </label>
+      <input type="range" id="understandability-slider" min="1" max="10" value="1">
+      <span id="understandability-slider-value">1</span>
+     </div>
       <div class="slider-container">
         <label for="ease_of_understanding-slider">Ease of Understanding:</label>
         <input type="range" id="ease_of_understanding-slider" min="1" max="10" value="1">
@@ -191,8 +193,8 @@
     <p>FIN-X. All rights reserved.</p>
   </footer>
 
-
-
+  <div id="info-dialog" class="dialog"></div>
+  
   <!-- Fullscreen Image Modal -->
   <div id="image-modal" class="modal hidden">
     <span class="close" id="close-modal">&times;</span>

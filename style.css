@@ -371,13 +371,18 @@ p {
   }
 }
 
-/* Remove bullet points from the partner list */
-#partners ul {
-  list-style-type: none;
-  padding-left: 0; /* Optional: removes extra left padding */
+.dialog {
+  position: absolute;
+  display: none;
+  padding: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  max-width: 200px;
+  z-index: 1000;
 }
 
-/* Optional: style for each list item for better readability */
-#partners ul li {
-  margin-bottom: 10px; /* Adds space between each list item */
+.dialog.show {
+  display: block;
 }

@@ -34,6 +34,31 @@ document.addEventListener('DOMContentLoaded', function () {
   explanationDropdown.addEventListener('change', function () {
     filterImages();
   });
+
+
+
+  const labels = document.querySelectorAll('.dialog-label');
+  const infoDialog = document.getElementById('info-dialog');
+
+  // Show dialog with label information on hover and move it with the cursor
+  labels.forEach(label => {
+    label.addEventListener('mouseenter', function (event) {
+      const info = label.getAttribute('data-info');
+      infoDialog.textContent = info;
+      infoDialog.classList.add('show');
+    });
+
+    label.addEventListener('mousemove', function (event) {
+      infoDialog.style.top = `${event.pageY + 10}px`;
+      infoDialog.style.left = `${event.pageX + 10}px`;
+    });
+
+    label.addEventListener('mouseleave', function () {
+      infoDialog.classList.remove('show');
+    });
+  });
+
+  
 });
 
 function filterImages() {
