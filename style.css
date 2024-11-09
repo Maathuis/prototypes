@@ -370,3 +370,14 @@ p {
     margin-left: 0;
   }
 }
+
+/* Remove bullet points from the partner list */
+#partners ul {
+  list-style-type: none;
+  padding-left: 0; /* Optional: removes extra left padding */
+}
+
+/* Optional: style for each list item for better readability */
+#partners ul li {
+  margin-bottom: 10px; /* Adds space between each list item */
+}
