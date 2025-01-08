@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prototype Evaluation Tool</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="main-container">
+    <h1>Prototype Evaluation Tool</h1>
+    <div class="container">
+      <div class="controls">
+        <!-- Datasets Selection -->
+        <div class="control-group">
+          <label for="datasets">Select Datasets:</label>
+          <select id="datasets" multiple>
+            <option value="data1">Data 1</option>
+            <option value="data2">Data 2</option>
+            <option value="data3">Data 3</option>
+          </select>
+        </div>
+
+        <!-- Prototypes Selection -->
+        <div class="control-group">
+          <label for="prototypes">Select Prototypes:</label>
+          <select id="prototypes" multiple>
+            <option value="Prototype 1">Prototype 1</option>
+            <option value="Prototype 2">Prototype 2</option>
+            <option value="Prototype 3">Prototype 3</option>
+            <option value="Prototype 4">Prototype 4</option>
+            <option value="Prototype 5">Prototype 5</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="group-categories">Add Categories to Group:</label>
+          <select id="group-categories" multiple>
+            <option value="0">Understand</option>
+            <option value="1">Easy to Understand</option>
+            <option value="2">Easy to Use</option>
+            <option value="3">Satisfying</option>
+            <option value="4">Useful</option>
+            <option value="5">Trustworthy</option>
+            <option value="6">Typical</option>
+            <option value="7">Sufficient</option>
+            <option value="8">Correct</option>
+            <option value="9">Concise</option>
+            <option value="10">Act</option>
+          </select>
+          <button id="add-group">Add Group</button>
+        </div>
+
+        <!-- User-Defined Groups Preview -->
+        <div id="user-groups">
+          <h3>User-Defined Groups:</h3>
+          <ul id="group-list"></ul>
+        </div>
+
+        <button id="update-chart">Update Chart</button>
+      </div>
+
+      <div id="chart-container">
+        <canvas id="radar-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
