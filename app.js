@@ -32,44 +32,64 @@ const ctx = document.getElementById('radar-chart').getContext('2d');
 let chart;
 let userDefinedGroups = [];
 
-// Calculate the mean of an array of values
 function calculateMean(values) {
   const total = values.reduce((sum, value) => sum + value, 0);
   return total / values.length;
 }
 
-// Aggregates data by categories
+function detectOutliers(values) {
+  const mean = calculateMean(values);
+  const stdDev = Math.sqrt(values.reduce((sum, val) => sum + Math.pow(val - mean, 2), 0) / values.length);
+  const threshold = 2; // Number of standard deviations to define outliers
+  return values.map(value => Math.abs(value - mean) > threshold * stdDev ? 'outlier' : 'normal');
+}
+
 function getAggregatedDataByCategories(selectedDatasets, selectedPrototypes, selectedCategories) {
   return selectedPrototypes.map(prototype => {
     const aggregatedValues = selectedCategories.map(category => {
       const values = selectedDatasets.map(dataset => {
         return dataSets[dataset][prototype][categories.indexOf(category)];
       });
-      return calculateMean(values);  // Aggregate values by mean
+
+      const outlierStatus = detectOutliers(values);
+      const meanValue = calculateMean(values);
+
+      return {
+        meanValue,
+        outliers: outlierStatus
+      };
     });
 
     return {
       label: prototype,
-      data: aggregatedValues,
+      data: aggregatedValues.map(val => val.meanValue),
       fill: true,
-      backgroundColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`,
-      borderColor: `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 1)`,
+      backgroundColor: aggregatedValues.map(val =>
+        val.outliers.includes('outlier') ? 'rgba(255, 0, 0, 0.2)' : 'rgba(0, 0, 255, 0.2)'
+      ),
+      borderColor: aggregatedValues.map(val =>
+        val.outliers.includes('outlier') ? 'rgba(255, 0, 0, 1)' : 'rgba(0, 0, 255, 1)'
+      ),
       borderWidth: 2
     };
   });
 }
 
-// Aggregates data by user-defined groups
 function getAggregatedDataByGroups(selectedDatasets, selectedPrototypes) {
+  const groupsToUse = userDefinedGroups.length > 0 ? userDefinedGroups : [{
+    name: 'All Categories',
+    categories: categories.map((_, index) => index)
+  }];
+
   return selectedPrototypes.map(prototype => {
-    const aggregatedValues = userDefinedGroups.map(group => {
+    const aggregatedValues = groupsToUse.map(group => {
       const values = selectedDatasets.map(dataset => {
         const groupValues = group.categories.map(categoryIndex => {
           return dataSets[dataset][prototype][categoryIndex];
         });
-        return calculateMean(groupValues);  // Aggregate values by mean within the group
+        return calculateMean(groupValues);
       });
-      return calculateMean(values);  // Aggregate values by mean across datasets
+      return calculateMean(values);
     });
 
     return {
@@ -83,74 +103,81 @@ function getAggregatedDataByGroups(selectedDatasets, selectedPrototypes) {
   });
 }
 
-// Update chart based on selected datasets, groups, or categories
 function updateChart() {
+  const chartType = document.getElementById('chart-type').value;
+
   const selectedDatasets = Array.from(document.getElementById('datasets').selectedOptions).map(opt => opt.value);
   const selectedPrototypes = Array.from(document.getElementById('prototypes').selectedOptions).map(opt => opt.value);
 
-  // If no groups are created, use only the selected categories
   const aggregatedData = getAggregatedDataByGroups(selectedDatasets, selectedPrototypes);
+
   if (chart) chart.destroy();
 
   chart = new Chart(ctx, {
-    type: 'radar',
+    type: chartType,
     data: {
-      // If no groups are defined, the labels will be the selected categories
-      labels: userDefinedGroups.map(group => group.name),  // If no groups, use selected categories
+      labels: userDefinedGroups.map(group => group.name),
       datasets: aggregatedData
     },
     options: {
       responsive: true,
       scales: {
         r: {
-          angleLines: {
-            display: true  // Display angle lines
-          },
+          angleLines: { display: true },
           suggestedMin: 0,
           suggestedMax: 5,
-          ticks: {
-            display: true  // Display ticks for range
-          }
+          ticks: { display: true }
         }
       }
     }
   });
 }
 
-// Add a new user-defined group
-document.getElementById('add-group').addEventListener('click', () => {
-  const selectedCategories = Array.from(document.getElementById('group-categories').selectedOptions).map(opt => parseInt(opt.value));
-
-  // If no group name is provided, use the selected category names as the group name
-  const newGroupName = selectedCategories.map(i => categories[i]).join(', ');
-
-  if (selectedCategories.length > 0) {
-    const newGroup = { name: newGroupName, categories: selectedCategories };
-    userDefinedGroups.push(newGroup);
-
-    // Update the group list
-    const groupList = document.getElementById('group-list');
+function updateGroupList() {
+  const groupList = document.getElementById('group-list');
+  groupList.innerHTML = '';
+  
+  userDefinedGroups.forEach(group => {
     const li = document.createElement('li');
-    li.innerHTML = `${selectedCategories.map(i => categories[i]).join(', ')} 
-                    <button class="remove-group">x</button>`;
+    li.innerHTML = `${group.name} <button class="remove-group">x</button>`;
     groupList.appendChild(li);
 
-    // Add event listener to remove the group when the "x" is clicked
-    li.querySelector('.remove-group').addEventListener('click', () => {
-      userDefinedGroups = userDefinedGroups.filter(group => group !== newGroup);
-      groupList.removeChild(li);
-      updateChart(); // Update the chart after removing the group
+    // Remove group functionality
+    li.querySelector('.remove-group').addEventListener('click', (event) => {
+      event.stopPropagation();  // Prevent click from bubbling to the parent li element
+      userDefinedGroups = userDefinedGroups.filter(g => g !== group);
+      updateGroupList();
+      updateChart();
     });
 
-    // Reset the form
-    document.getElementById('group-categories').selectedIndex = -1;
+    // Rename group functionality (only triggered when the li itself is clicked, not the remove button)
+    li.addEventListener('click', () => {
+      const newGroupName = prompt("Enter new group name", group.name);
+      if (newGroupName) {
+        group.name = newGroupName;
+        li.innerHTML = `${newGroupName} <button class="remove-group">x</button>`;
+      }
+      updateChart();
+    });
+  });
+}
+document.getElementById('add-group').addEventListener('click', function() {
+  const selectedCategories = Array.from(document.getElementById('group-categories').selectedOptions).map(opt => parseInt(opt.value));
+  
+  // Set the group name to the concatenated names of the selected categories
+  const groupName = selectedCategories.map(index => categories[index]).join(", ");
+  const newGroup = { name: groupName, categories: selectedCategories };
 
-    // Update the chart with the new group
-    updateChart();
-  } else {
-    alert("Please select categories.");
-  }
+  userDefinedGroups.push(newGroup);
+  updateGroupList();
+  updateChart();
 });
 
-// Trigger chart update when the 'Update Chart' button is clicked
-document.getElementById('update-chart').addEventListener('click', updateChart);
+
+document.querySelectorAll('#datasets, #prototypes, #group-categories').forEach(element => {
+  element.addEventListener('change', updateChart);
+});
+
+document.getElementById('chart-type').addEventListener('change', updateChart);
+
+updateChart();
